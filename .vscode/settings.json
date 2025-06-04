@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "UnoOnline.sln"
+    "dotnet.defaultSolution": "UnoClone.sln"
 }
