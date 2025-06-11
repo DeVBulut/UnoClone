@@ -6,7 +6,7 @@ public class CardView : MonoBehaviour
 {
 
     [SerializeField] private TMP_Text numberText;
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private MeshRenderer cardMeshRenderer;
 
     void Awake()
     {
@@ -26,16 +26,16 @@ public class CardView : MonoBehaviour
             Debug.LogWarning("Component not assigned -> numberText");
         }
         else if
-        (spriteRenderer == null)
+        (cardMeshRenderer == null)
         {
             Debug.LogWarning("Component not assigned -> spriteRenderer");
         }
     }
 
-    public void Setup(CardData data, GameObject testDrawnCardObject)
+    public void Setup(CardData data)
     {
         numberText.text = data.value.ToString();
-        spriteRenderer.color = GetColor(data.cardColor);
+        cardMeshRenderer.material.SetColor("_BaseColor", GetColor(data.cardColor));
         Debug.Log(data.cardColor);
     }
 
