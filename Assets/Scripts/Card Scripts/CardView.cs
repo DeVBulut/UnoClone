@@ -34,7 +34,8 @@ public class CardView : MonoBehaviour
 
     public void Setup(CardData data)
     {
-        numberText.text = data.value.ToString();
+        if (data.value != null) numberText.text = data.value.ToString();
+        else numberText.text = data.cardType.ToString();
         cardMeshRenderer.material.SetColor("_BaseColor", GetColor(data.cardColor));
         Debug.Log(data.cardColor);
     }
