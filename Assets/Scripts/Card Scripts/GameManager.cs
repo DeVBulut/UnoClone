@@ -8,17 +8,17 @@ public class GameManager : MonoBehaviour
     public Deck deck;
     public Transform discardAnchor;
 
-    private List<CardData> discardPile = new();
-    private CardData topCard;
-    private CardView lastDiscardView;
+    public bool gameOver = false;
+    public bool isProcessingTurn = false;
+    public List<CardData> discardPile = new();
+    public CardData topCard;
+    public CardView lastDiscardView;
 
     public enum PlayerTurn { Human, AI }
     public PlayerTurn currentTurn = PlayerTurn.Human;
     public Hand aiHand;
-    private bool isProcessingTurn = false;
     public UnoAI aiLogic;
     public UnoGameFlow gameFlow;
-    private bool gameOver = false;
 
     void Start()
     {
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         PlaceInitialTopCard();
     }
 
-    private void PlaceInitialTopCard()
+    public void PlaceInitialTopCard()
     {
         topCard = deck.GenerateCard();
         discardPile.Add(topCard);
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         DrawCardToHand(playerHand);
     }
 
-    private void DrawCardToHand(Hand hand)
+    public void DrawCardToHand(Hand hand)
     {
         CardData card = deck.GenerateCard();
         hand.AddCard(card);
@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private bool IsLegalPlay(CardData played, CardData top)
+    public bool IsLegalPlay(CardData played, CardData top)
     {
         // Wilds always legal
         if (played.cardColor == CardColor.Black)

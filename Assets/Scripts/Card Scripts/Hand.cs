@@ -52,6 +52,11 @@ public class Hand : MonoBehaviour
         LayoutCards();
     }
 
+    public List<CardView> GetCardViews()
+    {
+        return new List<CardView>(handCards);
+    }
+
     private void LayoutCards()
     {
         float startX = -((handCards.Count - 1) * spacing) / 2f;

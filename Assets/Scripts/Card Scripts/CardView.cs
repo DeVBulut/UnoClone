@@ -7,6 +7,7 @@ public class CardView : MonoBehaviour
 
     [SerializeField] private TMP_Text numberText;
     [SerializeField] private MeshRenderer cardMeshRenderer;
+    public GameManager gameManager;
 
     void Awake()
     {
@@ -82,9 +83,9 @@ public class CardView : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (GameManager.Instance != null)
+        if (gameManager != null)
         {
-            GameManager.Instance.PlayCard(this);
+            gameManager.PlayCard(this);
         }
     }
 }
