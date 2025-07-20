@@ -12,14 +12,27 @@ public class GameManager : MonoBehaviour
     private CardData topCard;
     private CardView lastDiscardView;
 
+    public enum PlayerTurn { Human, AI }
+    public PlayerTurn currentTurn = PlayerTurn.Human;
+    public Hand aiHand;
+    private bool isProcessingTurn = false;
+    public UnoAI aiLogic;
+    public UnoGameFlow gameFlow;
+    private bool gameOver = false;
+
     void Start()
     {
-        // Draw 5 cards to start
+        currentTurn = PlayerTurn.Human;
+        gameOver = false;
+        isProcessingTurn = false;
+        aiLogic.Initialize(this, aiHand);
+        gameFlow.Initialize(this, playerHand, aiHand);
+        // Draw 5 cards to start for both players
         for (int i = 0; i < 5; i++)
         {
-            DrawCard();
+            DrawCardToHand(playerHand);
+            DrawCardToHand(aiHand);
         }
-        // Place initial top card
         PlaceInitialTopCard();
     }
 
@@ -33,12 +46,19 @@ public class GameManager : MonoBehaviour
 
     public void DrawCard()
     {
+        if (currentTurn != PlayerTurn.Human || isProcessingTurn || gameOver) return;
+        DrawCardToHand(playerHand);
+    }
+
+    private void DrawCardToHand(Hand hand)
+    {
         CardData card = deck.GenerateCard();
-        playerHand.AddCard(card);
+        hand.AddCard(card);
     }
 
     public void PlayCard(CardView cardView)
     {
+        if (currentTurn != PlayerTurn.Human || isProcessingTurn || gameOver) return;
         CardData card = cardView.GetComponent<CardView>()?.GetCardData();
         if (card == null)
         {
@@ -47,14 +67,10 @@ public class GameManager : MonoBehaviour
         }
         if (IsLegalPlay(card, topCard))
         {
-            // Remove from hand
             playerHand.RemoveCard(cardView);
-            // Add to discard pile and set as top card
             discardPile.Add(card);
             topCard = card;
-            // Apply effect (pass nulls for GameState/Player for now)
             card.cardEffect?.Apply(null, null, null);
-            // Move cardView to discardAnchor
             if (lastDiscardView != null)
             {
                 lastDiscardView.DisableInteraction();
@@ -65,6 +81,12 @@ public class GameManager : MonoBehaviour
             cardView.DisableInteraction();
             lastDiscardView = cardView;
             Debug.Log($"Played card: {card.cardColor} {card.cardType} {card.value}");
+            if (playerHand.IsEmpty())
+            {
+                gameFlow.OnPlayerWin();
+                return;
+            }
+            StartCoroutine(aiLogic.SwitchToAITurn());
         }
         else
         {
@@ -103,6 +125,33 @@ public class GameManager : MonoBehaviour
             // fallback: destroy cardView
             Destroy(cardView.gameObject);
         }
+    }
+
+    public void RestartGame()
+    {
+        StopAllCoroutines();
+        // Clear hands
+        playerHand.ClearHand();
+        aiHand.ClearHand();
+        // Clear discard
+        discardPile.Clear();
+        topCard = null;
+        if (lastDiscardView != null)
+        {
+            Destroy(lastDiscardView.gameObject);
+            lastDiscardView = null;
+        }
+        // Reset game state
+        gameOver = false;
+        currentTurn = PlayerTurn.Human;
+        isProcessingTurn = false;
+        // Redraw hands
+        for (int i = 0; i < 5; i++)
+        {
+            DrawCardToHand(playerHand);
+            DrawCardToHand(aiHand);
+        }
+        PlaceInitialTopCard();
     }
 }
 
