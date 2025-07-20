@@ -36,6 +36,22 @@ public class Hand : MonoBehaviour
         }
     }
 
+    public bool IsEmpty()
+    {
+        return handCards.Count == 0;
+    }
+
+    public void ClearHand()
+    {
+        foreach (var card in handCards)
+        {
+            if (card != null)
+                Destroy(card.gameObject);
+        }
+        handCards.Clear();
+        LayoutCards();
+    }
+
     private void LayoutCards()
     {
         float startX = -((handCards.Count - 1) * spacing) / 2f;
