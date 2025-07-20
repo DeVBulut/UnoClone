@@ -11,6 +11,11 @@ public class CardView : MonoBehaviour
     void Awake()
     {
         ComponentCheck();   
+        // Ensure Collider is present
+        if (GetComponent<Collider>() == null)
+        {
+            gameObject.AddComponent<BoxCollider>();
+        }
     }
 
     void Start()
@@ -63,6 +68,23 @@ public class CardView : MonoBehaviour
             default:
                 Debug.Log("Error thrown: Card Color not on index --> " + cardColorString);
                 return Color.black;
+        }
+    }
+
+    public void DisableInteraction()
+    {
+        Collider col = GetComponent<Collider>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+    }
+
+    void OnMouseDown()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.PlayCard(this);
         }
     }
 }

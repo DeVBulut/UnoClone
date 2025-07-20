@@ -26,6 +26,16 @@ public class Hand : MonoBehaviour
         LayoutCards();
     }
 
+    public void RemoveCard(CardView cardView)
+    {
+        if (handCards.Contains(cardView))
+        {
+            handCards.Remove(cardView);
+            Destroy(cardView.gameObject);
+            LayoutCards();
+        }
+    }
+
     private void LayoutCards()
     {
         float startX = -((handCards.Count - 1) * spacing) / 2f;
