@@ -36,6 +36,11 @@ public class CardView : MonoBehaviour
         {
             Debug.LogWarning("Component not assigned -> spriteRenderer");
         }
+
+        if (GetComponent<Collider>() == null)
+        {
+            gameObject.AddComponent<BoxCollider>();
+        }
     }
 
     public void Setup(CardData data)

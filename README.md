@@ -1,24 +1,20 @@
 # UnoClone
 
-An experimental online UNO-style card game built with Unity to explore real-time multiplayer, and card systems. 
+A data-driven UNO-style card game prototype built in Unity to explore turn-based logic, AI behavior, and card system architecture.
 
 ## Status
 
-🚧 Work in progress — basic card system functional, effect logic under development.
+✅ Playable single-player demo with full card flow and AI turns  
+❌ Multiplayer, UI polish, and networking were deprioritized for scope
 
-## Goals
+## Features
 
-- Implement core UNO rules and turn logic
-- Integrate server-side multiplayer.
-- Add chat rooms and matchmaking
-- Build animations and VFX for card plays
-
-## Getting Started
-
-1. Clone the repo
-2. Open in Unity
-3. Run `CardTestScene` to preview the current system
+- Dynamic card generation using weighted randomness
+- Card effects implemented via strategy pattern (`ICardEffect`)
+- Click-to-play with turn-based rule validation
+- Basic AI opponent that draws and plays valid cards
 
 ## Author
 
-Made by Emirhan B. 
+Made by Emirhan B.  
+Built as a solo prototype for learning backend-integrated game logic and Unity gameplay systems.
